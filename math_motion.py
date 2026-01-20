@@ -1,3 +1,6 @@
+# Git Learning Exercise - Rajath Singh - Jan 2026
+# Testing branch workflow with math_motion module
+
 import socket
 import time
 from pattern_generator import PatternGenerator
