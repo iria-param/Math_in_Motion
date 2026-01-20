@@ -416,6 +416,205 @@ class PatternGenerator:
             trajectory.append([j1, j2, j3, j4, j5, j6])
         
         return trajectory
+    
+    def heart_equation(self, scale=0.25, speed=1.0):
+        """
+        Generate a Heart shape pattern using the heart curve equation
+        
+        Heart parametric equations:
+        x = 16*sin³(t)
+        y = 13*cos(t) - 5*cos(2t) - 2*cos(3t) - cos(4t)
+        
+        Parameters:
+        - scale: size of the pattern (0.1 to 0.4)
+        - speed: traverse speed
+        
+        Returns:
+        List of joint angle arrays [j1, j2, j3, j4, j5, j6]
+        """
+        trajectory = []
+        
+        j1_center = 0.0
+        j2_center = -1.57
+        j3_center = 1.57
+        j4_center = 0.0
+        j5_center = 1.57
+        j6_center = 0.0
+        
+        for i in range(self.num_points):
+            t = (i / self.num_points) * 2 * math.pi * speed
+            
+            # Heart curve parametric equations (normalized)
+            sin_t = math.sin(t)
+            cos_t = math.cos(t)
+            
+            # Heart shape
+            x = 16 * (sin_t ** 3) * scale * 0.015
+            y = (13 * cos_t - 5 * math.cos(2*t) - 2 * math.cos(3*t) - math.cos(4*t)) * scale * 0.008
+            
+            # Add 3D component for visual interest
+            z = (1 + math.cos(t)) * scale * 0.2
+            
+            # Map pattern to joint angles
+            j1 = j1_center + x * 1.5
+            j2 = j2_center + y * 0.8
+            j3 = j3_center + z * 0.6 + (abs(x) + abs(y)) * 0.15
+            
+            # Wrist joints for smooth orientation
+            j4 = j4_center + math.sin(t * 1.5) * 0.2
+            j5 = j5_center + math.cos(t * 1.5) * 0.2
+            j6 = j6_center + t * 0.1
+            
+            # Clamp values to valid ranges
+            j1 = max(-3.14, min(3.14, j1))
+            j2 = max(-3.14, min(3.14, j2))
+            j3 = max(0.5, min(2.5, j3))
+            j4 = max(-3.14, min(3.14, j4))
+            j5 = max(-3.14, min(3.14, j5))
+            j6 = max(-3.14, min(3.14, j6))
+            
+            trajectory.append([j1, j2, j3, j4, j5, j6])
+        
+        return trajectory
+    
+    def batman_equation(self, scale=0.25, speed=1.0):
+        """
+        Generate a Batman logo shape pattern using piecewise mathematical equations
+        
+        This creates the iconic Batman symbol through multiple curve segments
+        
+        Parameters:
+        - scale: size of the pattern (0.1 to 0.4)
+        - speed: traverse speed
+        
+        Returns:
+        List of joint angle arrays [j1, j2, j3, j4, j5, j6]
+        """
+        trajectory = []
+        
+        j1_center = 0.0
+        j2_center = -1.57
+        j3_center = 1.57
+        j4_center = 0.0
+        j5_center = 1.57
+        j6_center = 0.0
+        
+        for i in range(self.num_points):
+            t = (i / self.num_points) * 2 * math.pi * speed
+            
+            # Create Batman-like shape using multiple mathematical curves
+            # The shape is created by combining different equations
+            
+            # Upper curves (wings)
+            if t < math.pi:
+                # Right wing
+                x = math.cos(t) * scale * 0.4
+                # Complex curve for the wing shape
+                y = (math.sin(t) * 0.8 + math.sin(t)**3 * 0.6) * scale * 0.2
+            else:
+                # Left wing (mirrored)
+                x = math.cos(t) * scale * 0.4
+                y = (math.sin(t) * 0.8 + math.sin(t)**3 * 0.6) * scale * 0.2
+            
+            # Create the characteristic pointed ears
+            ear_function = abs(math.sin(t * 3)) * math.cos(t)
+            y_ears = y + ear_function * scale * 0.15
+            
+            # Add head/face area in center
+            if abs(math.cos(t)) < 0.3:
+                y_head = (math.sin(t) * 0.3) * scale * 0.2
+            else:
+                y_head = y_ears
+            
+            # 3D variation for depth
+            z = abs(math.sin(t * 1.5)) * scale * 0.25
+            
+            # Map to joint angles
+            j1 = j1_center + x * 1.2
+            j2 = j2_center + y_head * 0.9
+            j3 = j3_center + z * 0.7 + abs(x) * 0.2
+            
+            # Wrist for smooth motion through the pattern
+            j4 = j4_center + math.sin(t * 2) * 0.15
+            j5 = j5_center + math.cos(t * 2) * 0.15
+            j6 = j6_center + t * 0.08
+            
+            # Clamp values to valid ranges
+            j1 = max(-3.14, min(3.14, j1))
+            j2 = max(-3.14, min(3.14, j2))
+            j3 = max(0.5, min(2.5, j3))
+            j4 = max(-3.14, min(3.14, j4))
+            j5 = max(-3.14, min(3.14, j5))
+            j6 = max(-3.14, min(3.14, j6))
+            
+            trajectory.append([j1, j2, j3, j4, j5, j6])
+        
+        return trajectory
+    
+    def infinity_symbol(self, scale=0.3, speed=1.0):
+        """
+        Generate an Infinity symbol (∞) pattern using lemniscate equation
+        This is an alternative infinity pattern with different characteristics
+        
+        Lemniscate: x² = a²*cos(2θ) in polar coordinates
+        
+        Parameters:
+        - scale: size of the pattern (0.1 to 0.5)
+        - speed: traverse speed
+        
+        Returns:
+        List of joint angle arrays [j1, j2, j3, j4, j5, j6]
+        """
+        trajectory = []
+        
+        j1_center = 0.0
+        j2_center = -1.57
+        j3_center = 1.57
+        j4_center = 0.0
+        j5_center = 1.57
+        j6_center = 0.0
+        
+        for i in range(self.num_points):
+            t = (i / self.num_points) * 2 * math.pi * speed
+            
+            # Lemniscate parametric form
+            # More pronounced figure-8 shape
+            denom = 1 + math.sin(t) ** 2
+            
+            if denom != 0:
+                x = scale * math.cos(t) / denom * 1.2
+                y = scale * math.sin(t) * math.cos(t) / denom * 1.2
+            else:
+                x = 0
+                y = 0
+            
+            # 3D undulation
+            z = scale * math.sin(t * 2) * 0.5
+            
+            # Enhanced 3D rotation through the pattern
+            rotation_factor = math.sin(t * 1.5) * 0.3
+            
+            # Map to joint angles with more dramatic movements
+            j1 = j1_center + x * 2.0 + rotation_factor * 0.5
+            j2 = j2_center + y * 1.2 + z * 0.6
+            j3 = j3_center + z * 0.8 + (abs(x) + abs(y)) * 0.25
+            
+            # Wrist joints create smooth orientation changes
+            j4 = j4_center + math.sin(t * 2.5) * 0.25
+            j5 = j5_center + math.cos(t * 2.5) * 0.25
+            j6 = j6_center + t * 0.12
+            
+            # Clamp values to valid ranges
+            j1 = max(-3.14, min(3.14, j1))
+            j2 = max(-3.14, min(3.14, j2))
+            j3 = max(0.5, min(2.5, j3))
+            j4 = max(-3.14, min(3.14, j4))
+            j5 = max(-3.14, min(3.14, j5))
+            j6 = max(-3.14, min(3.14, j6))
+            
+            trajectory.append([j1, j2, j3, j4, j5, j6])
+        
+        return trajectory
 
 
 if __name__ == "__main__":
@@ -441,3 +640,18 @@ if __name__ == "__main__":
     wave = generator.wave_pattern(amplitude=0.3, wavelength=3, speed=1.0)
     generator.print_trajectory(wave, "Wave Pattern")
     generator.export_to_urscript(wave, "wave_pattern.script")
+    
+    # Generate Heart pattern (NEW)
+    heart = generator.heart_equation(scale=0.25, speed=1.0)
+    generator.print_trajectory(heart, "Heart Equation Pattern")
+    generator.export_to_urscript(heart, "heart_pattern.script")
+    
+    # Generate Batman pattern (NEW)
+    batman = generator.batman_equation(scale=0.25, speed=1.0)
+    generator.print_trajectory(batman, "Batman Equation Pattern")
+    generator.export_to_urscript(batman, "batman_pattern.script")
+    
+    # Generate Infinity Symbol pattern (NEW)
+    infinity_symbol = generator.infinity_symbol(scale=0.3, speed=1.0)
+    generator.print_trajectory(infinity_symbol, "Infinity Symbol Pattern")
+    generator.export_to_urscript(infinity_symbol, "infinity_symbol_pattern.script")
