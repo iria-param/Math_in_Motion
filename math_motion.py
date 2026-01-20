@@ -1,3 +1,10 @@
+"""
+Math Motion Module for UR10 Robot
+Author: Rajath Singh
+Date: Jan 2026
+Purpose: Generate and control mathematical motion patterns for UR10 robot arm
+"""
+
 import socket
 import time
 from pattern_generator import PatternGenerator
