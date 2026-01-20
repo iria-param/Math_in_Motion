@@ -188,6 +188,50 @@ class PatternGenerator:
         
         return trajectory
     
+    def heart_pattern(self, scale=0.25, speed=1.0):
+        """
+        Generate a heart shape pattern for the robot
+        
+        Parameters:
+        - scale: size of the heart (0.1 to 0.4 recommended)
+        - speed: how fast to traverse the pattern
+        
+        Returns:
+        List of joint angle arrays [j1, j2, j3, j4, j5, j6]
+        """
+        trajectory = []
+        
+        # Home position (starting point)
+        j1_center = 0.0      # Shoulder pan (rotating base)
+        j2_center = -1.57    # Shoulder lift (raised)
+        j3_center = 1.57     # Elbow (extended)
+        j4_center = 0.0      # Wrist 1
+        j5_center = 1.57     # Wrist 2
+        j6_center = 0.0      # Wrist 3
+        
+        # Trace the heart shape using parametric equations
+        # x(t) = 16 * sin³(t)
+        # y(t) = 13*cos(t) - 5*cos(2t) - 2*cos(3t) - cos(4t)
+        for i in range(self.num_points):
+            t = (i / self.num_points) * 2 * math.pi * speed
+            
+            # Heart parametric equations (scaled for joint angles)
+            x = scale * 16 * math.sin(t)**3
+            y = scale * (13*math.cos(t) - 5*math.cos(2*t) - 2*math.cos(3*t) - math.cos(4*t))
+            z = scale * 0.2 * math.sin(t * 3)  # Subtle vertical variation
+            
+            # Map the heart pattern to joint angles
+            j1 = j1_center + x * 0.6  # Base rotation follows X
+            j2 = j2_center + y * 0.4  # Shoulder lift follows Y
+            j3 = j3_center + y * 0.3 + z * 0.2  # Elbow follows Y and Z
+            j4 = j4_center + math.sin(t * 2) * 0.12
+            j5 = j5_center + math.cos(t * 2) * 0.12
+            j6 = j6_center + t * 0.06  # Gentle twist
+            
+            trajectory.append([j1, j2, j3, j4, j5, j6])
+        
+        return trajectory
+    
     def print_trajectory(self, trajectory, label="Trajectory"):
         """Pretty print the trajectory"""
         print(f"\n{label}:")

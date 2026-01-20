@@ -24,6 +24,7 @@ def generate_pattern_script(pattern_name, num_points=100, acceleration=1.2, velo
         'circle': generator.circle_pattern(radius=0.3, plane='horizontal', speed=1.0),
         'spiral': generator.spiral_pattern(radius=0.3, height=0.4, speed=1.0),
         'wave': generator.wave_pattern(amplitude=0.3, wavelength=4, speed=1.0),
+        'heart': generator.heart_pattern(scale=0.25, speed=1.0),
         'lorenz': generator.lorenz_attractor(scale=0.3, complexity=complexity),
         'rossler': generator.rossler_attractor(scale=0.3, complexity=complexity),
         'henon': generator.henon_attractor(scale=0.3, complexity=complexity),
@@ -89,13 +90,14 @@ if __name__ == "__main__":
     print("  2. Circle (Horizontal)")
     print("  3. Spiral (3D Helix)")
     print("  4. Wave (Sine Wave)")
+    print("  5. Heart (Love Shape)")
     print("\nAttractor Patterns (complex, all joints moving):")
-    print("  5. Lorenz (Butterfly chaos - classic)")
-    print("  6. Rössler (Spiral chaos)")
-    print("  7. Hénon (Folded chaos)")
+    print("  6. Lorenz (Butterfly chaos - classic)")
+    print("  7. Rössler (Spiral chaos)")
+    print("  8. Hénon (Folded chaos)")
     print()
     
-    choice = input("Enter pattern (1-7) or name: ").strip().lower()
+    choice = input("Enter pattern (1-8) or name: ").strip().lower()
     
     # Map numbers to pattern names
     pattern_map = {
@@ -103,9 +105,10 @@ if __name__ == "__main__":
         '2': 'circle',
         '3': 'spiral',
         '4': 'wave',
-        '5': 'lorenz',
-        '6': 'rossler',
-        '7': 'henon',
+        '5': 'heart',
+        '6': 'lorenz',
+        '7': 'rossler',
+        '8': 'henon',
     }
     
     pattern = pattern_map.get(choice, choice)
